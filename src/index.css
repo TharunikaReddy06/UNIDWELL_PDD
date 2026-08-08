@@ -1,0 +1,334 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root,
+  [data-theme="light"],
+  .theme-light {
+    --background:    #F8FAFC;
+    --bg-primary:    #F8FAFC;
+    --bg-secondary:  #F1F5F9;
+    --surface:       #FFFFFF;
+    --surface-secondary: #F8FAFC;
+    --surface-hover: #F1F5F9;
+    --surface-muted: #E2E8F0;
+    --text-primary:  #0F172A;
+    --text-secondary:#64748B;
+    --text-muted:    #94A3B8;
+    --border:        #E2E8F0;
+    --border-color:  #E2E8F0;
+    --border-subtle: #F1F5F9;
+    --input-bg:      #FFFFFF;
+    --input-border:  #CBD5E1;
+    --shadow-color:  rgba(15, 23, 42, 0.08);
+
+    --color-success: #22C55E;
+    --color-warning: #F59E0B;
+    --color-error:   #EF4444;
+
+    --color-primary:   #0EA5A4;
+    --color-secondary: #2563EB;
+    --color-accent:    #22C55E;
+    --color-bg:        #F8FAFC;
+    --color-card:      #FFFFFF;
+    --color-ink:       #0F172A;
+    --color-ink-2:     #64748B;
+    --color-border:    #E2E8F0;
+  }
+
+  [data-theme="dark"],
+  .dark,
+  .theme-dark {
+    --background:    #0F172A;
+    --bg-primary:    #0F172A;
+    --bg-secondary:  #1E293B;
+    --surface:       #1E293B;
+    --surface-secondary: #0F172A;
+    --surface-hover: #334155;
+    --surface-muted: #1E293B;
+    --text-primary:  #F8FAFC;
+    --text-secondary:#94A3B8;
+    --text-muted:    #64748B;
+    --border:        #334155;
+    --border-color:  #334155;
+    --border-subtle: #1E293B;
+    --input-bg:      #1E293B;
+    --input-border:  #334155;
+    --shadow-color:  rgba(0, 0, 0, 0.5);
+
+    --color-success: #22C55E;
+    --color-warning: #F59E0B;
+    --color-error:   #EF4444;
+
+    --color-primary:   #0EA5A4;
+    --color-secondary: #2563EB;
+    --color-accent:    #22C55E;
+    --color-bg:        #0F172A;
+    --color-card:      #1E293B;
+    --color-ink:       #F8FAFC;
+    --color-ink-2:     #94A3B8;
+    --color-border:    #334155;
+  }
+
+  /* ─── Chat Viewport Lock (strictly fits inside viewport with zero scroll) ─── */
+  .chat-page-container,
+  body:has(.chat-page-container),
+  html:has(.chat-page-container),
+  #root:has(.chat-page-container) {
+    height: 100% !important;
+    max-height: 100vh !important;
+    overflow: hidden !important;
+    touch-action: none !important;
+    overscroll-behavior: none !important;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--bg-primary);
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Poppins', 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+    min-height: 100dvh;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+
+    /* ── Android WebView touch optimisations ── */
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    overscroll-behavior-y: none;
+  }
+
+  #root {
+    width: 100%;
+    max-width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    background-color: var(--bg-primary);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', 'Inter', system-ui, sans-serif;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+    transition: color 150ms ease;
+  }
+
+  /* ─── Global Dark Theme Overrides ─── */
+  .dark body,
+  .dark html,
+  .dark #root,
+  .dark main,
+  [data-theme="dark"] body,
+  [data-theme="dark"] html,
+  [data-theme="dark"] #root,
+  [data-theme="dark"] main,
+  [data-theme="dark"] .bg-\[var\(--bg-primary\)\] {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
+
+  .dark aside,
+  .dark header,
+  [data-theme="dark"] aside,
+  [data-theme="dark"] header,
+  [data-theme="dark"] .bg-white,
+  [data-theme="dark"] .dark\:bg-slate-900,
+  [data-theme="dark"] .dark\:bg-slate-850 {
+    background-color: var(--surface);
+    border-color: var(--border-color);
+  }
+
+  [data-theme="dark"] .bg-gray-50,
+  [data-theme="dark"] .bg-gray-100,
+  [data-theme="dark"] .dark\:bg-slate-800,
+  [data-theme="dark"] .dark\:bg-slate-700 {
+    background-color: var(--surface-secondary);
+    border-color: var(--border-color);
+  }
+
+  [data-theme="dark"] .border-gray-100,
+  [data-theme="dark"] .border-gray-200,
+  [data-theme="dark"] .dark\:border-slate-800,
+  [data-theme="dark"] .dark\:border-slate-700 {
+    border-color: var(--border-color);
+  }
+
+  [data-theme="dark"] .text-gray-900,
+  [data-theme="dark"] .dark\:text-white {
+    color: var(--text-primary);
+  }
+
+  /* Global input defaults */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="submit"]):not([type="button"]):not([type="file"]),
+  textarea,
+  select {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--text-primary);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--text-muted);
+  }
+
+  option {
+    background-color: var(--surface);
+    color: var(--text-primary);
+  }
+
+  ::selection {
+    background-color: var(--color-accent-glow, rgba(14, 165, 164, 0.2));
+    color: var(--text-primary);
+  }
+}
+
+@layer components {
+  /* ─── Premium Gradient Button ─── */
+  .btn-gradient {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl font-semibold text-sm text-white
+           transition-all duration-300 select-none cursor-pointer;
+    background: linear-gradient(135deg, #0EA5A4 0%, #2563EB 100%);
+    box-shadow: 0 4px 24px -4px rgba(14, 165, 164, 0.18);
+  }
+  .btn-gradient:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 32px -4px rgba(14, 165, 164, 0.45);
+  }
+  .btn-gradient:active {
+    transform: scale(0.98);
+    touch-action: manipulation;
+  }
+
+  /* ─── Premium Card ─── */
+  .card-premium {
+    @apply bg-white dark:bg-slate-900 rounded-[20px] border border-gray-100 dark:border-slate-800 transition-all duration-300 hover:-translate-y-1;
+    box-shadow: 0 2px 16px -2px rgba(15, 23, 42, 0.08), 0 1px 4px -1px rgba(15, 23, 42, 0.04);
+  }
+  .card-premium:hover {
+    box-shadow: 0 4px 24px -4px rgba(14, 165, 164, 0.18), 0 2px 8px -2px rgba(14, 165, 164, 0.08);
+  }
+
+  /* ─── Glass Card ─── */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 20px;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+  .glass-card:hover {
+    background: rgba(255, 255, 255, 0.14);
+    transform: scale(1.015);
+  }
+
+  /* ─── Dark Glass Card ─── */
+  .glass-card-dark {
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+  }
+
+  /* ─── Gradient Text ─── */
+  .text-gradient {
+    background: linear-gradient(135deg, #0EA5A4, #2563EB);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .text-gradient-accent {
+    background: linear-gradient(135deg, #22C55E, #0EA5A4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@layer utilities {
+  /* ─── Scrollbar Hide ─── */
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* ─── Panorama Scroll ─── */
+  .animate-panorama-scroll { animation: panorama-scroll 25s linear infinite; }
+}
+
+/* ─── Keyframes ─── */
+@keyframes panorama-scroll {
+  0%   { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ─── Password input: hide native browser icons ─── */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear,
+input[type="password"]::-webkit-contacts-auto-fill-button,
+input[type="password"]::-webkit-credentials-auto-fill-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* ─── Shimmer placeholder gradient ─── */
+.shimmer-bg {
+  background: linear-gradient(90deg, #f0fdfc 25%, #ccfbf9 50%, #f0fdfc 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s linear infinite;
+}
+.dark .shimmer-bg {
+  background: linear-gradient(90deg, #131d31 25%, #1e293b 50%, #131d31 75%);
+  background-size: 200% 100%;
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* ─── Android safe-area padding utility ─── */
+.safe-top    { padding-top:    env(safe-area-inset-top, 0px); }
+.safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
+.safe-left   { padding-left:   env(safe-area-inset-left, 0px); }
+.safe-right  { padding-right:  env(safe-area-inset-right, 0px); }
+
+/* ─── Android input / select reset ─── */
+input, select, textarea, button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* ─── Prevent text size inflation in landscape ─── */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* ─── Force GPU compositing on scroll containers ─── */
+.scroll-container {
+  -webkit-overflow-scrolling: touch;
+  will-change: transform;
+}

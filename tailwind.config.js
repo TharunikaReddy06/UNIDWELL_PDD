@@ -1,0 +1,140 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  darkMode: 'class',
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          50:  '#f0fdfc',
+          100: '#ccfbf9',
+          200: '#99f3f0',
+          300: '#5ce4e1',
+          400: '#2bcfcc',
+          500: '#0EA5A4',
+          600: '#0c9190',
+          700: '#0b7a79',
+          800: '#0d6060',
+          900: '#0f5051',
+        },
+        secondary: {
+          50:  '#eff6ff',
+          100: '#dbeafe',
+          200: '#bfdbfe',
+          300: '#93c5fd',
+          400: '#60a5fa',
+          500: '#3b82f6',
+          600: '#2563EB',
+          700: '#1d4ed8',
+          800: '#1e40af',
+          900: '#1e3a8a',
+        },
+        accent: {
+          50:  '#f0fdf4',
+          100: '#dcfce7',
+          200: '#bbf7d0',
+          300: '#86efac',
+          400: '#4ade80',
+          500: '#22C55E',
+          600: '#16a34a',
+          700: '#15803d',
+          800: '#166534',
+          900: '#14532d',
+        },
+        danger: {
+          50:  '#fef2f2',
+          100: '#fee2e2',
+          500: '#ef4444',
+          600: '#dc2626',
+          700: '#b91c1c',
+        },
+        warning: {
+          50:  '#fffbeb',
+          100: '#fef3c7',
+          500: '#F59E0B',
+          600: '#d97706',
+          700: '#b45309',
+        },
+        brand: {
+          dark: '#0F172A',
+          mid:  '#134E5E',
+          teal: '#0EA5A4',
+          blue: '#2563EB',
+          green: '#22C55E',
+        },
+        surface: {
+          DEFAULT: '#F8FAFC',
+          card:    '#FFFFFF',
+        },
+        ink: {
+          primary:   '#0F172A',
+          secondary: '#64748B',
+          muted:     '#94A3B8',
+          border:    '#E2E8F0',
+        },
+      },
+      fontFamily: {
+        sans:    ['Poppins', 'Inter', 'system-ui', 'sans-serif'],
+        heading: ['Poppins', 'Inter', 'system-ui', 'sans-serif'],
+        body:    ['Inter', 'Poppins', 'system-ui', 'sans-serif'],
+      },
+      borderRadius: {
+        '4xl': '2rem',
+        '5xl': '2.5rem',
+      },
+      boxShadow: {
+        'premium': '0 4px 24px -4px rgba(14, 165, 164, 0.18), 0 2px 8px -2px rgba(14, 165, 164, 0.08)',
+        'card':    '0 2px 16px -2px rgba(15, 23, 42, 0.08), 0 1px 4px -1px rgba(15, 23, 42, 0.04)',
+        'glow':    '0 0 40px 8px rgba(14, 165, 164, 0.35)',
+        'glow-lg': '0 0 80px 20px rgba(14, 165, 164, 0.45)',
+      },
+      backgroundImage: {
+        'brand-gradient':   'linear-gradient(135deg, #0F172A 0%, #134E5E 55%, #16A085 100%)',
+        'hero-gradient':    'linear-gradient(135deg, #0F172A 0%, #1E3A8A 55%, #0EA5A4 100%)',
+        'primary-gradient': 'linear-gradient(135deg, #0EA5A4 0%, #2563EB 100%)',
+        'accent-gradient':  'linear-gradient(135deg, #22C55E 0%, #0EA5A4 100%)',
+      },
+      animation: {
+        'float':        'float 3.5s ease-in-out infinite',
+        'float-slow':   'float 5s ease-in-out infinite',
+        'float-fast':   'float 2.5s ease-in-out infinite',
+        'glow-pulse':   'glowPulse 2.5s ease-in-out infinite',
+        'shimmer':      'shimmer 2s linear infinite',
+        'fade-up':      'fadeSlideUp 0.4s ease-out both',
+        'scale-in':     'scaleIn 0.3s ease-out both',
+        'progress-bar': 'progressBar 2.2s ease-in-out forwards',
+      },
+      keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%':      { transform: 'translateY(-10px)' },
+        },
+        glowPulse: {
+          '0%, 100%': { opacity: '0.6', transform: 'scale(1)' },
+          '50%':      { opacity: '1',   transform: 'scale(1.08)' },
+        },
+        shimmer: {
+          '0%':   { backgroundPosition: '-200% center' },
+          '100%': { backgroundPosition: '200% center' },
+        },
+        fadeSlideUp: {
+          '0%':   { opacity: '0', transform: 'translateY(12px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        scaleIn: {
+          '0%':   { opacity: '0', transform: 'scale(0.92)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        progressBar: {
+          '0%':   { width: '0%' },
+          '80%':  { width: '90%' },
+          '100%': { width: '100%' },
+        },
+      },
+    },
+  },
+  plugins: [],
+}

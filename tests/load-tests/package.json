@@ -1,0 +1,13 @@
+{
+  "name": "unidwell-load-tests",
+  "version": "1.0.0",
+  "description": "Unidwell Baseline & 100-User Load & Performance automated tests with Excel reporting",
+  "main": "run-tests.js",
+  "scripts": {
+    "test": "node run-tests.js",
+    "report": "node run-tests.js"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0"
+  }
+}

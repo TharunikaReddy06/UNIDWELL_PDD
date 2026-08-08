@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/unidwell-icon.png" />
+
+    <!-- ── Viewport: Capacitor / Android WebView optimised ── -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+
+    <!-- ── PWA / Mobile meta ── -->
+    <meta name="theme-color" content="#0EA5A4" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <!-- ── SEO ── -->
+    <title>Unidwell - Stay Together. Live Better.</title>
+    <meta name="description" content="Unidwell — Find your perfect student accommodation and compatible roommates." />
+
+    <!-- ── Google Fonts ── -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- ── Instant Theme Initialization (prevents flash) ── -->
+    <script>
+      (function() {
+        try {
+          var mode = localStorage.getItem('unidwell-theme') || 'light';
+          var mql = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+          var isDarkSystem = mql ? mql.matches : false;
+          var active = mode === 'system' ? (isDarkSystem ? 'dark' : 'light') : mode;
+          var root = document.documentElement;
+          root.classList.remove('dark', 'theme-dark', 'theme-light');
+          root.removeAttribute('data-theme');
+          if (active === 'dark') {
+            root.classList.add('dark', 'theme-dark');
+            root.setAttribute('data-theme', 'dark');
+            root.style.colorScheme = 'dark';
+          } else {
+            root.classList.add('theme-light');
+            root.setAttribute('data-theme', 'light');
+            root.style.colorScheme = 'light';
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

@@ -1,0 +1,13 @@
+{
+  "name": "unidwell-appium-tests",
+  "version": "1.0.0",
+  "description": "Unidwell Appium Mobile App E2E automated tests with Excel reporting",
+  "main": "run-tests.js",
+  "scripts": {
+    "test": "node run-tests.js",
+    "report": "node run-tests.js"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0"
+  }
+}

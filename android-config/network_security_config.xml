@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Network Security Config for Unidwell
+  Allows HTTPS traffic to Firebase and Google services.
+  Required so Firebase Auth, Firestore, and Storage work correctly inside the APK.
+-->
+<network-security-config>
+  <domain-config cleartextTrafficPermitted="false">
+    <!-- Firebase / Google APIs — always HTTPS only -->
+    <domain includeSubdomains="true">firebaseapp.com</domain>
+    <domain includeSubdomains="true">googleapis.com</domain>
+    <domain includeSubdomains="true">firebasestorage.app</domain>
+    <domain includeSubdomains="true">firebaseio.com</domain>
+    <domain includeSubdomains="true">google.com</domain>
+    <domain includeSubdomains="true">gstatic.com</domain>
+    <domain includeSubdomains="true">fonts.googleapis.com</domain>
+    <domain includeSubdomains="true">fonts.gstatic.com</domain>
+  </domain-config>
+
+  <!-- Debug builds: allow cleartext for localhost hot-reload -->
+  <debug-overrides>
+    <trust-anchors>
+      <certificates src="system" />
+      <certificates src="user" />
+    </trust-anchors>
+  </debug-overrides>
+</network-security-config>
