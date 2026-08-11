@@ -94,10 +94,10 @@ export default function Step3IdUpload({ onNext, onBack, defaultFile, defaultPrev
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
-      className="w-full max-w-md mx-auto bg-white dark:bg-slate-900 text-gray-900 dark:text-white p-6 rounded-3xl border border-gray-100 dark:border-slate-800 shadow-sm"
+      className="w-full max-w-md mx-auto bg-white dark:bg-slate-900 text-gray-900 dark:text-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-gray-100 dark:border-slate-800 shadow-sm"
     >
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">Upload College ID</h2>
+      <div className="text-center mb-4 sm:mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-1">Upload College ID</h2>
         <p className="text-xs text-gray-500 dark:text-gray-400">Step 3 of 5 — Upload your student ID card to scan</p>
       </div>
 
@@ -111,13 +111,13 @@ export default function Step3IdUpload({ onNext, onBack, defaultFile, defaultPrev
 
       {isScanning ? (
         /* OCR Loading Scanner Animation */
-        <div className="border-2 border-primary-300 dark:border-primary-800 bg-primary-50/60 dark:bg-primary-950/40 rounded-2xl p-8 text-center flex flex-col items-center justify-center space-y-4">
-          <div className="relative w-20 h-20 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center shadow-md text-primary-600 dark:text-primary-400">
-            <ScanLine className="w-10 h-10 animate-pulse text-primary-600 dark:text-primary-400" />
+        <div className="border-2 border-primary-300 dark:border-primary-800 bg-primary-50/60 dark:bg-primary-950/40 rounded-2xl p-6 sm:p-8 text-center flex flex-col items-center justify-center space-y-4">
+          <div className="relative w-16 h-16 sm:w-20 sm:h-20 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center shadow-md text-primary-600 dark:text-primary-400">
+            <ScanLine className="w-8 h-8 sm:w-10 sm:h-10 animate-pulse text-primary-600 dark:text-primary-400" />
             <div className="absolute inset-0 border-2 border-primary-500 rounded-2xl animate-ping opacity-30"></div>
           </div>
           <div>
-            <h3 className="text-base font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">
+            <h3 className="text-sm sm:text-base font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">
               <Loader2 className="w-4 h-4 animate-spin text-primary-600 dark:text-primary-400" />
               <span>Scanning ID Card</span>
             </h3>
@@ -129,26 +129,26 @@ export default function Step3IdUpload({ onNext, onBack, defaultFile, defaultPrev
         </div>
       ) : (
         /* Upload Area */
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           <div 
             onClick={triggerFileInput}
-            className="border-2 border-dashed border-primary-300 dark:border-primary-800 hover:border-primary-500 bg-primary-50/40 dark:bg-primary-950/30 hover:bg-primary-50/80 dark:hover:bg-primary-950/50 rounded-2xl p-8 text-center flex flex-col items-center justify-center cursor-pointer transition-all duration-200"
+            className="border-2 border-dashed border-primary-300 dark:border-primary-800 hover:border-primary-500 bg-primary-50/40 dark:bg-primary-950/30 hover:bg-primary-50/80 dark:hover:bg-primary-950/50 rounded-2xl p-5 sm:p-8 text-center flex flex-col items-center justify-center cursor-pointer transition-all duration-200"
           >
-            <div className="w-16 h-16 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center shadow-md text-primary-600 dark:text-primary-400 mb-3">
-              <UploadCloud className="w-8 h-8" />
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center shadow-md text-primary-600 dark:text-primary-400 mb-2 sm:mb-3">
+              <UploadCloud className="w-6 h-6 sm:w-8 sm:h-8" />
             </div>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">Upload College ID</h3>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-4 max-w-[260px] mx-auto">
+            <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-1">Upload College ID</h3>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-3 sm:mb-4 max-w-[260px] mx-auto">
               Upload a clear photo or PDF of your student ID card. OCR will automatically extract details.
             </p>
             <Button variant="primary" type="button" size="sm" onClick={(e) => { e.stopPropagation(); triggerFileInput(); }}>
               Select Image File
             </Button>
-            <p className="text-xs text-gray-400 dark:text-gray-500 mt-3">Accepted: JPG, PNG, JPEG, PDF (Max 5MB)</p>
+            <p className="text-[11px] sm:text-xs text-gray-400 dark:text-gray-500 mt-2 sm:mt-3">Accepted: JPG, PNG, JPEG, PDF (Max 5MB)</p>
           </div>
           
           {error && (
-            <div className="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-300 p-3.5 rounded-xl text-center text-sm font-medium flex items-center justify-center gap-2">
+            <div className="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-300 p-3 rounded-xl text-center text-xs sm:text-sm font-medium flex items-center justify-center gap-2">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
               <span>{error}</span>
             </div>

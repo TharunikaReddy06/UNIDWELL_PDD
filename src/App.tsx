@@ -1,4 +1,4 @@
-import { Component, ReactNode, useEffect } from 'react';
+import { Component, ReactNode, useEffect, useState } from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
 import OwnerLayout from './layouts/OwnerLayout';
@@ -71,8 +71,13 @@ class GlobalErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySta
             </div>
             <h2 className="text-xl font-bold text-gray-900">Something went wrong</h2>
             <p className="text-xs text-gray-500">
-              An unexpected application error occurred. Click below to reload the app.
+              {this.state.error?.message || 'An unexpected application error occurred.'}
             </p>
+            {this.state.error?.stack && (
+              <pre className="text-[10px] text-left bg-gray-100 dark:bg-slate-850 p-3 rounded-xl overflow-x-auto text-red-600 max-h-40 font-mono">
+                {this.state.error.stack}
+              </pre>
+            )}
             <button
               onClick={() => {
                 localStorage.removeItem('unidwell-storage');
@@ -94,7 +99,7 @@ class GlobalErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySta
 function StudentRouteWrapper() {
   const { user, authInitialized, authLoading, isLoggingOut } = useStore();
   if (!authInitialized || authLoading) {
-    return <SplashScreen />;
+    return <div className="min-h-screen bg-[#091E2A]" />;
   }
   if (!user || isLoggingOut) return <Navigate to="/welcome" replace />;
   if (user.role === 'OWNER') return <Navigate to="/owner" replace />;
@@ -104,11 +109,24 @@ function StudentRouteWrapper() {
 function OwnerRouteWrapper() {
   const { user, authInitialized, authLoading, isLoggingOut } = useStore();
   if (!authInitialized || authLoading) {
-    return <SplashScreen />;
+    return <div className="min-h-screen bg-[#091E2A]" />;
   }
   if (!user || isLoggingOut) return <Navigate to="/welcome" replace />;
   if (user.role === 'STUDENT') return <Navigate to="/" replace />;
   return <OwnerLayout />;
+}
+
+function AuthenticatedChatWrapper() {
+  const { user, authInitialized, authLoading, isLoggingOut } = useStore();
+  if (!authInitialized || authLoading) {
+    return <div className="min-h-screen bg-[#091E2A]" />;
+  }
+  if (!user || isLoggingOut) return <Navigate to="/welcome" replace />;
+  return (
+    <div className="h-screen h-[100dvh] w-full max-w-full overflow-hidden bg-[var(--bg-primary)] dark:bg-[#0B1320] text-gray-900 dark:text-gray-100 flex flex-col">
+      <ChatScreen />
+    </div>
+  );
 }
 
 function AppContent() {
@@ -137,6 +155,8 @@ function AppContent() {
     themeMode,
     accentColor
   } = useStore();
+
+  const [initialSplashDone, setInitialSplashDone] = useState(false);
 
   useEffect(() => {
     applyThemeToDocument(themeMode || 'light', accentColor || 'teal');
@@ -223,6 +243,14 @@ function AppContent() {
     };
   }, [user?.id, user?.role, login, logout, setProperties, setConversations, setSavedProperties, setRoommatePosts, setNotifications, setVisitRequests, setPropertyViews, setInterestedStudentsList, setUnreadMessageCount]);
 
+  if (!initialSplashDone) {
+    return (
+      <HashRouter>
+        <SplashScreen onComplete={() => setInitialSplashDone(true)} />
+      </HashRouter>
+    );
+  }
+
   return (
     <HashRouter>
       {/* Global Toast Notification System */}
@@ -274,6 +302,11 @@ function AppContent() {
           <Route path="/signup/owner" element={<OwnerSignupWizard />} />
         </Route>
         
+        {/* Shared Individual Chat Routes (Full-screen for both Student & Owner) */}
+        <Route path="/chat/:id" element={<AuthenticatedChatWrapper />} />
+        <Route path="/owner/chat/:id" element={<AuthenticatedChatWrapper />} />
+        <Route path="/owner/messages/:id" element={<AuthenticatedChatWrapper />} />
+
         {/* Student Only Routes */}
         <Route element={<StudentRouteWrapper />}>
           <Route path="/" element={<Home />} />
@@ -281,7 +314,6 @@ function AppContent() {
           <Route path="/saved" element={<SavedPropertiesPage />} />
           <Route path="/roommates" element={<RoommatesHome />} />
           <Route path="/chat" element={<ChatList />} />
-          <Route path="/chat/:id" element={<ChatScreen />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile/change-password" element={<ChangePasswordPage />} />
           <Route path="/profile/privacy" element={<PrivacySecurityPage />} />
@@ -304,7 +336,7 @@ function AppContent() {
           path="*"
           element={
             !authInitialized || authLoading ? (
-              <SplashScreen />
+              <div className="min-h-screen bg-[#091E2A]" />
             ) : (
               <Navigate
                 to={

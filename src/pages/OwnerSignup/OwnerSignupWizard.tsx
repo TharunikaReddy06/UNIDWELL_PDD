@@ -117,20 +117,20 @@ export default function OwnerSignupWizard() {
   };
 
   return (
-    <div className="min-h-full flex flex-col justify-center py-6 px-4">
+    <div className="min-h-full flex flex-col justify-center py-4 sm:py-6 px-2 sm:px-4">
       {/* Brand Logo Header */}
-      <div className="mb-6 flex flex-col items-center">
+      <div className="mb-4 sm:mb-6 flex flex-col items-center">
         <img
           src={unidwellLogo}
           alt="Unidwell Logo"
-          className="w-[150px] h-auto object-contain rounded-2xl shadow-md border border-gray-100/60"
+          className="w-[125px] sm:w-[150px] h-auto object-contain rounded-2xl shadow-md border border-gray-100/60"
         />
       </div>
 
       {/* Progress Indicator */}
-      <div className="w-full max-w-md mx-auto mb-8 px-4">
+      <div className="w-full max-w-md mx-auto mb-6 sm:mb-8 px-2 sm:px-4">
         <div className="flex items-center justify-between relative">
-          <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-full h-1 bg-gray-100 rounded-full -z-10"></div>
+          <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-full h-1 bg-gray-100 dark:bg-slate-800 rounded-full -z-10"></div>
           <div 
             className="absolute left-0 top-1/2 transform -translate-y-1/2 h-1 bg-secondary-500 rounded-full transition-all duration-500 -z-10"
             style={{ width: `${((step - 1) / 3) * 100}%` }}
@@ -139,10 +139,10 @@ export default function OwnerSignupWizard() {
           {[1, 2, 3, 4].map((i) => (
             <div 
               key={i} 
-              className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-colors duration-300
+              className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-bold text-xs sm:text-sm transition-colors duration-300
                 ${step > i ? 'bg-secondary-500 text-white' : 
-                  step === i ? 'bg-secondary-600 text-white shadow-[0_0_0_4px_rgba(var(--color-secondary-100),1)]' : 
-                  'bg-white border-2 border-gray-200 text-gray-400'}
+                  step === i ? 'bg-secondary-600 text-white shadow-[0_0_0_3px_rgba(37,99,235,0.3)]' : 
+                  'bg-white dark:bg-slate-800 border-2 border-gray-200 dark:border-slate-700 text-gray-400'}
               `}
             >
               {i}

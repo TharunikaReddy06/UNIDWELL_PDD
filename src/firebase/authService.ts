@@ -438,6 +438,16 @@ export function subscribeToAuthChanges(onUserChanged: (user: RegisteredUser | nu
         onUserChanged(null);
       }
     } else {
+      const mockStr = localStorage.getItem('unidwell_mock_user');
+      if (mockStr) {
+        try {
+          const parsed = JSON.parse(mockStr);
+          if (parsed && parsed.id) {
+            onUserChanged(parsed);
+            return;
+          }
+        } catch (e) {}
+      }
       onUserChanged(null);
     }
   });

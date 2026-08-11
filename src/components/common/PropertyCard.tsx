@@ -3,6 +3,7 @@ import { Card, CardContent } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { MapPin, Star, Compass, ShieldCheck, Heart, Eye, Users } from 'lucide-react';
 import { useStore } from '../../store/useStore';
+import { DEFAULT_PROPERTY_IMAGE } from '../../firebase/propertyService';
 
 interface Props {
   property: Property;
@@ -18,6 +19,23 @@ export const PropertyCard: React.FC<Props> = ({ property, onClick }) => {
   const uniqueViewsCount = (propertyViews || []).filter((v) => v.propertyId === property.id).length || property.viewsCount || 0;
   const uniqueInterestedCount = (interestedStudentsList || []).filter((s) => s.propertyId === property.id).length || (property.interestedStudents || []).length || 0;
 
+  const candidateImage = Array.isArray(property.images) && property.images.length > 0 && typeof property.images[0] === 'string' && property.images[0].trim().length > 0 && !property.images[0].startsWith('blob:')
+    ? property.images[0].trim()
+    : DEFAULT_PROPERTY_IMAGE;
+
+  const has360Tour = Boolean(
+    property.panorama360Url &&
+    typeof property.panorama360Url === 'string' &&
+    property.panorama360Url.trim().length > 0 &&
+    !property.panorama360Url.startsWith('blob:')
+  );
+
+  // Real rating calculated from property reviews or verified rating
+  const hasReviews = Array.isArray(property.reviews) && property.reviews.length > 0;
+  const computedRating = hasReviews
+    ? Math.round((property.reviews!.reduce((acc, r) => acc + (r.rating || 5), 0) / property.reviews!.length) * 10) / 10
+    : (typeof property.rating === 'number' && property.rating > 0 ? property.rating : null);
+
   const handleToggleSave = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!user) return;
@@ -31,13 +49,19 @@ export const PropertyCard: React.FC<Props> = ({ property, onClick }) => {
     >
       <div className="relative h-48 w-full overflow-hidden">
         <img 
-          src={property.images[0] || 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80'} 
+          src={candidateImage} 
           alt={property.title} 
+          onError={(e) => {
+            const target = e.currentTarget;
+            if (target.src !== DEFAULT_PROPERTY_IMAGE) {
+              target.src = DEFAULT_PROPERTY_IMAGE;
+            }
+          }}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
         <div className="absolute top-3 left-3 flex gap-1.5 flex-wrap">
           <Badge variant="primary">{property.type}</Badge>
-          {property.panorama360Url && (
+          {has360Tour && (
             <span className="bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 border border-white/20">
               <Compass className="w-3 h-3 text-secondary-400" />
               360° Tour
@@ -66,14 +90,20 @@ export const PropertyCard: React.FC<Props> = ({ property, onClick }) => {
       </div>
 
       <CardContent>
-        <div className="flex justify-between items-start mb-1.5">
+        <div className="flex justify-between items-start mb-1.5 gap-2">
           <h3 className="font-bold text-base text-gray-900 dark:text-white line-clamp-1 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
             {property.title}
           </h3>
-          <div className="flex items-center gap-1 text-xs font-bold text-gray-700 dark:text-gray-300 bg-yellow-50 dark:bg-yellow-950/40 px-1.5 py-0.5 rounded-md">
-            <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
-            {property.rating}
-          </div>
+          {computedRating ? (
+            <div className="flex items-center gap-1 text-xs font-bold text-gray-700 dark:text-gray-300 bg-yellow-50 dark:bg-yellow-950/40 px-1.5 py-0.5 rounded-md flex-shrink-0">
+              <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+              {computedRating.toFixed(1)}
+            </div>
+          ) : (
+            <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-slate-800 px-1.5 py-0.5 rounded-md flex-shrink-0 whitespace-nowrap">
+              No reviews yet
+            </span>
+          )}
         </div>
 
         <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400 text-xs mb-2">

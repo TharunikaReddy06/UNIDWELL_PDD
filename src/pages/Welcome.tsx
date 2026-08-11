@@ -7,16 +7,16 @@ export default function Welcome() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-[85vh] sm:min-h-[88vh] flex items-center justify-center p-4 sm:p-6 w-full max-w-full overflow-x-hidden bg-[var(--bg-primary)] dark:bg-[#0F172A] transition-colors">
+    <div className="w-full min-h-full flex items-center justify-center p-3 sm:p-6 overflow-x-hidden transition-colors">
       <motion.div
         initial={{ opacity: 0, y: 16, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.35, ease: 'easeOut' }}
-        className="w-full max-w-[480px] bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl border border-gray-100 dark:border-slate-800 shadow-xl p-6 sm:p-8 space-y-6 text-center"
+        className="w-full max-w-[440px] mx-auto bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl border border-gray-100 dark:border-slate-800 shadow-xl p-5 sm:p-8 space-y-5 sm:space-y-6 text-center"
       >
         {/* Top Header: Logo, Name & Tagline */}
-        <div className="flex flex-col items-center justify-center space-y-2.5">
-          <div className="w-16 h-16 sm:w-18 sm:h-18 p-1.5 rounded-2xl bg-gray-50 dark:bg-slate-800 border border-gray-100 dark:border-slate-700 shadow-xs flex items-center justify-center">
+        <div className="flex flex-col items-center justify-center space-y-2">
+          <div className="w-14 h-14 sm:w-18 sm:h-18 p-1.5 rounded-2xl bg-gray-50 dark:bg-slate-800 border border-gray-100 dark:border-slate-700 shadow-xs flex items-center justify-center">
             <img
               src={unidwellIcon}
               alt="Unidwell Logo"
@@ -38,7 +38,7 @@ export default function Welcome() {
         </div>
 
         {/* Welcome Headline & Description */}
-        <div className="space-y-1.5">
+        <div className="space-y-1">
           <h2 className="text-lg sm:text-xl font-extrabold text-gray-900 dark:text-white">
             Welcome to Unidwell
           </h2>
@@ -48,12 +48,12 @@ export default function Welcome() {
         </div>
 
         {/* Primary Action Buttons */}
-        <div className="space-y-3 pt-1">
+        <div className="space-y-2.5 sm:space-y-3 pt-1">
           {/* Student Login Button */}
           <button
             id="btn-student-login"
             onClick={() => navigate('/login/student')}
-            className="w-full flex items-center justify-center gap-3 py-3.5 px-6 rounded-2xl text-white font-bold text-sm sm:text-base transition-all duration-200 shadow-md hover:scale-[1.01] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary-500/50"
+            className="w-full flex items-center justify-center gap-3 py-3 sm:py-3.5 px-5 sm:px-6 rounded-2xl text-white font-bold text-sm sm:text-base transition-all duration-200 shadow-md hover:scale-[1.01] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary-500/50"
             style={{ background: 'linear-gradient(135deg, var(--color-primary, #0EA5A4) 0%, var(--color-secondary, #2563EB) 100%)' }}
           >
             <GraduationCap className="w-5 h-5 flex-shrink-0" />
@@ -64,7 +64,7 @@ export default function Welcome() {
           <button
             id="btn-owner-login"
             onClick={() => navigate('/login/owner')}
-            className="w-full flex items-center justify-center gap-3 py-3.5 px-6 rounded-2xl font-bold text-sm sm:text-base bg-white dark:bg-slate-800 border-2 border-gray-200 dark:border-slate-700 text-gray-800 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-slate-750 hover:border-primary-400 dark:hover:border-primary-600 transition-all duration-200 shadow-xs hover:scale-[1.01] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary-500/40"
+            className="w-full flex items-center justify-center gap-3 py-3 sm:py-3.5 px-5 sm:px-6 rounded-2xl font-bold text-sm sm:text-base bg-white dark:bg-slate-800 border-2 border-gray-200 dark:border-slate-700 text-gray-800 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-slate-750 hover:border-primary-400 dark:hover:border-primary-600 transition-all duration-200 shadow-xs hover:scale-[1.01] active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-primary-500/40"
           >
             <Building2 className="w-5 h-5 text-secondary-600 dark:text-secondary-400 flex-shrink-0" />
             <span>Property Owner Login</span>
@@ -72,7 +72,7 @@ export default function Welcome() {
         </div>
 
         {/* Create Account Link */}
-        <div className="pt-2">
+        <div className="pt-1 sm:pt-2">
           <p className="text-xs text-gray-500 dark:text-gray-400 mb-1 font-medium">New to Unidwell?</p>
           <button
             id="btn-create-account"
@@ -85,7 +85,7 @@ export default function Welcome() {
         </div>
 
         {/* Terms of Service and Privacy Policy */}
-        <div className="pt-4 border-t border-gray-100 dark:border-slate-800 w-full">
+        <div className="pt-3 sm:pt-4 border-t border-gray-100 dark:border-slate-800 w-full">
           <p className="text-[11px] text-gray-400 dark:text-gray-500 leading-relaxed">
             By continuing, you agree to our{' '}
             <span className="underline cursor-pointer hover:text-gray-600 dark:hover:text-gray-300 transition-colors">

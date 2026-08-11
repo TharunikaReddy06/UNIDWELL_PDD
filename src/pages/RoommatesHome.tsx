@@ -44,7 +44,7 @@ export default function RoommatesHome() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[var(--bg-primary)] dark:bg-[#0B1320] text-gray-900 dark:text-white min-h-screen pb-24 relative transition-colors duration-150">
+    <div className="flex flex-col w-full min-h-0 bg-[var(--bg-primary)] dark:bg-[#0B1320] text-gray-900 dark:text-white pb-24 relative transition-colors duration-150">
       
       {/* Header */}
       <div className="bg-white dark:bg-slate-900 px-6 pt-12 pb-4 shadow-sm z-10 sticky top-0 space-y-3 border-b border-gray-100 dark:border-slate-800 transition-colors">

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
+import { SplashScreen as CapacitorSplashScreen } from '@capacitor/splash-screen';
 import unidwellLogo from '../../assets/unidwell-logo.png';
 
 interface SplashScreenProps {
@@ -14,10 +15,10 @@ interface SplashScreenProps {
  * then seamlessly transitions to the Sign In / Welcome page.
  */
 
-const TOTAL_MS       = 3200;
-const FADE_OUT_MS    = 2600;
-const LOADING_MS     = 1800;
-const SUBTITLE_MS    = 1200;
+const TOTAL_MS       = 4000;
+const FADE_OUT_MS    = 3400;
+const LOADING_MS     = 2000;
+const SUBTITLE_MS    = 1300;
 const TITLE_MS       = 800;
 const LOGO_MS        = 100;
 
@@ -42,6 +43,8 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
   };
 
   useEffect(() => {
+    CapacitorSplashScreen.hide().catch(() => {});
+
     const after = (ms: number, fn: () => void) => {
       const t = setTimeout(fn, ms);
       timers.current.push(t);
@@ -180,8 +183,8 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
               src={unidwellLogo}
               alt="Unidwell Logo"
               style={{
-                width:'180px',
-                height:'180px',
+                width:'clamp(140px, 36vw, 180px)',
+                height:'clamp(140px, 36vw, 180px)',
                 objectFit:'cover',
                 borderRadius:'24px',
                 display:'block',

@@ -105,11 +105,11 @@ export default function WebSidebar() {
               className="w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm uppercase shadow-sm flex-shrink-0"
               style={{ background: isOwner ? 'linear-gradient(135deg, #2563EB, #1d4ed8)' : 'linear-gradient(135deg, #0EA5A4, #0c9190)', color: '#fff' }}
             >
-              {user.name[0]}
+              {user.name?.[0] || 'U'}
             </div>
             <div className="flex-1 min-w-0">
               <h4 className="font-bold text-xs text-gray-900 dark:text-white truncate flex items-center gap-1">
-                {user.name}
+                {user.name || 'User'}
                 <ShieldCheck className="w-3.5 h-3.5 text-accent-500 flex-shrink-0" />
               </h4>
               <span

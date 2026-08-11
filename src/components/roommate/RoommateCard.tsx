@@ -25,9 +25,12 @@ export const RoommateCard: React.FC<Props> = ({ post, onEdit }) => {
 
   const handleMessageStudent = () => {
     if (!user) return;
+    const roomType = post.roomType || 'Accommodation';
+    const locationStr = post.preferredLocation || post.collegeName || 'Near Campus';
+    const inquiryTitle = `Roommate Inquiry: ${roomType} (${locationStr})`;
     const chatId = startConversation(
       `roommate-${post.id}`,
-      `Roommate Inquiry: ${post.roomType} (${post.preferredLocation})`,
+      inquiryTitle,
       post.authorId,
       authorName,
       user

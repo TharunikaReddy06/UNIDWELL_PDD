@@ -83,16 +83,48 @@ export default function OwnerDashboard() {
     setIsAnalyticsOpen(true);
   };
 
-  const handleStartChatWithStudent = (studentId: string, studentName: string, propId: string, propTitle: string) => {
+  const handleStartChatWithStudent = (
+    studentId: string,
+    studentName: string,
+    propId: string,
+    propTitle: string,
+    studentEmail?: string,
+    studentPhone?: string,
+    studentCollege?: string,
+    studentAvatar?: string
+  ) => {
     if (!user) return;
+    const effectiveStudentId = studentId || 'student-1';
+    const effectiveStudentName = studentName || 'Student';
+    const effectivePropId = propId || (ownerProperties[0]?.id || 'prop-1');
+    const effectivePropTitle = propTitle || (ownerProperties[0]?.title || 'Accommodation');
+
     const chatId = startConversation(
-      propId,
-      propTitle,
+      effectivePropId,
+      effectivePropTitle,
       user.id,
       user.name,
-      { id: studentId, name: studentName, email: '', role: 'STUDENT', verified: true }
+      {
+        id: effectiveStudentId,
+        name: effectiveStudentName,
+        email: studentEmail || '',
+        phone: studentPhone || '',
+        college: studentCollege || 'Verified Student',
+        avatar: studentAvatar || '',
+        role: 'STUDENT',
+        verified: true,
+      }
     );
-    navigate(`/owner/messages`);
+    navigate(`/chat/${chatId}`, {
+      state: {
+        activeChatId: chatId,
+        chatId: chatId,
+        studentId: effectiveStudentId,
+        studentName: effectiveStudentName,
+        propertyId: effectivePropId,
+        propertyTitle: effectivePropTitle,
+      },
+    });
   };
 
   return (
@@ -376,7 +408,18 @@ export default function OwnerDashboard() {
                     
                     <div className="flex gap-1.5 pt-1.5 flex-wrap">
                       <button
-                        onClick={() => handleStartChatWithStudent(item.studentId, item.studentName, item.propertyId, item.propertyTitle)}
+                        onClick={() =>
+                          handleStartChatWithStudent(
+                            item.studentId || item.studentUid || item.id,
+                            item.studentName,
+                            item.propertyId,
+                            item.propertyTitle,
+                            item.studentEmail,
+                            item.studentPhone,
+                            item.studentCollege || item.collegeName,
+                            item.studentAvatar || item.profileImage
+                          )
+                        }
                         className="bg-purple-600 hover:bg-purple-700 text-white text-[10px] font-bold px-2.5 py-1 rounded-xl shadow-2xs flex items-center gap-1"
                       >
                         <MessageSquare className="w-3 h-3" /> Chat

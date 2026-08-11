@@ -143,6 +143,17 @@ export interface VisitRequest {
   createdAt: string;
 }
 
+export interface PropertyReview {
+  id: string;
+  propertyId: string;
+  studentId: string;
+  studentName: string;
+  studentAvatar?: string;
+  rating: number;
+  comment?: string;
+  createdAt: string;
+}
+
 export interface Property {
   id: string;
   ownerId: string;
@@ -156,12 +167,15 @@ export interface Property {
   amenities: string[];
   type: 'PRIVATE' | 'SHARED' | 'APARTMENT' | 'Single Room' | 'Shared Room' | 'PG';
   available: boolean;
-  rating: number;
+  rating?: number;
+  reviewsCount?: number;
+  reviews?: PropertyReview[];
 
   // Real Property Details
   collegeNearby?: string;
   fullAddress?: string;
   googleMapUrl?: string;
+  googleMapsUrl?: string;
   numberOfRooms?: number;
   numberOfBeds?: number;
   roomSizeSqFt?: number;

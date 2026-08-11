@@ -1,12 +1,13 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { User, Property, RoommatePost, Conversation, ChatMessage, InterestedStudent, PropertyViewLog, AppNotification, VisitRequest, PropertyViewRecord, InterestedStudentRecord } from '../types';
+import type { User, Property, PropertyReview, RoommatePost, Conversation, ChatMessage, InterestedStudent, PropertyViewLog, AppNotification, VisitRequest, PropertyViewRecord, InterestedStudentRecord } from '../types';
 import { 
   updateUserProfileInFirestore, 
   logoutFromFirebase, 
   addPropertyToFirestore, 
   updatePropertyInFirestore, 
   deletePropertyFromFirestore,
+  addPropertyReviewInFirestore,
   getOrCreateChatInFirestore,
   sendMessageToFirestore,
   markMessagesAsSeenInFirestore,
@@ -20,7 +21,9 @@ import {
   recordPropertyViewInFirestore,
   addInterestedStudentToFirestore,
   toggleInterestedStudentInFirestore,
-  removeInterestedStudentFromFirestore
+  removeInterestedStudentFromFirestore,
+  extractPropertyImages,
+  extract360TourUrl
 } from '../firebase/index';
 import { applyThemeToDocument, getSavedTheme, type ThemeMode, type AccentColor } from '../utils/theme';
 
@@ -123,6 +126,7 @@ interface AppState {
   addProperty: (property: Property) => void;
   updateProperty: (id: string, updated: Partial<Property>) => void;
   deleteProperty: (id: string) => void;
+  addPropertyReview: (propertyId: string, review: PropertyReview) => Promise<void>;
   
   // Property View Tracking
   recordPropertyViewLog: (propertyId: string, studentUser: RegisteredUser) => void;
@@ -581,17 +585,31 @@ export const useStore = create<AppState>()(
         });
       },
 
-      setProperties: (newProperties) => set({ properties: newProperties }),
+      setProperties: (newProperties) => {
+        const cleaned = (newProperties || []).map((p) => ({
+          ...p,
+          images: extractPropertyImages(p),
+          panorama360Url: extract360TourUrl(p),
+        }));
+        set({ properties: cleaned });
+      },
 
       // Real Property CRUD
       addProperty: (newProp) => {
+        const cleanImages = extractPropertyImages(newProp);
+        const clean360 = extract360TourUrl(newProp);
         const propertyWithDefaults: Property = {
           ...newProp,
           id: newProp.id || `prop-${Date.now()}`,
+          images: cleanImages,
+          panorama360Url: clean360,
           viewsCount: newProp.viewsCount || 0,
           viewedStudentIds: newProp.viewedStudentIds || [],
           viewLogs: newProp.viewLogs || [],
           interestedStudents: newProp.interestedStudents || [],
+          rating: newProp.rating !== undefined ? newProp.rating : undefined,
+          reviewsCount: newProp.reviewsCount || (newProp.reviews ? newProp.reviews.length : 0),
+          reviews: newProp.reviews || [],
           status: newProp.status || 'Published',
           available: newProp.available !== undefined ? newProp.available : true,
           createdAt: newProp.createdAt || new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
@@ -629,6 +647,32 @@ export const useStore = create<AppState>()(
           conversations: state.conversations.filter((c) => c.propertyId !== id),
           visitRequests: state.visitRequests.filter((v) => v.propertyId !== id),
         }));
+      },
+
+      addPropertyReview: async (propertyId, review) => {
+        try {
+          const { averageRating, reviewsCount } = await addPropertyReviewInFirestore(propertyId, review);
+          set((state) => ({
+            properties: state.properties.map((p) => {
+              if (p.id === propertyId) {
+                const existing = p.reviews || [];
+                const other = existing.filter((r) => r.studentId !== review.studentId);
+                const updatedReviews = [review, ...other];
+                return {
+                  ...p,
+                  reviews: updatedReviews,
+                  reviewsCount,
+                  rating: averageRating,
+                };
+              }
+              return p;
+            }),
+          }));
+          get().showToast('Thank you! Your review has been submitted.');
+        } catch (err) {
+          console.error('Error adding property review:', err);
+          get().showToast('Failed to submit review. Please try again.');
+        }
       },
 
 
@@ -711,15 +755,42 @@ export const useStore = create<AppState>()(
         
         addInterestedStudent(propertyId, studentUser, 'Message Sent');
 
-        const linkedProp = properties.find(p => p.id === propertyId);
+        const linkedProp = properties.find((p) => p.id === propertyId);
         const ownerPhone = linkedProp?.ownerPhone || '7842384450';
+        const effectiveOwnerName = ownerName || linkedProp?.ownerName || 'Property Owner';
+        const effectivePropName = propertyName || linkedProp?.title || 'Property';
         const chatId = `chat_${propertyId}_${studentUser.id}`;
+
+        const newConv: Conversation = {
+          id: chatId,
+          propertyId,
+          propertyName: effectivePropName,
+          ownerId,
+          ownerName: effectiveOwnerName,
+          studentId: studentUser.id,
+          studentName: studentUser.name || 'Student',
+          studentAvatar: studentUser.avatar || '',
+          studentCollege: studentUser.college || 'Verified Student',
+          studentPhone: studentUser.phone || '',
+          lastMessage: 'Conversation started',
+          lastTimestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }),
+          unreadCount: 0,
+        };
+
+        set((state) => {
+          const exists = state.conversations.some((c) => c.id === chatId);
+          return {
+            conversations: exists
+              ? state.conversations.map((c) => (c.id === chatId ? { ...c, ...newConv } : c))
+              : [newConv, ...state.conversations],
+          };
+        });
 
         getOrCreateChatInFirestore(
           propertyId,
-          propertyName,
+          effectivePropName,
           ownerId,
-          ownerName || linkedProp?.ownerName || 'Property Owner',
+          effectiveOwnerName,
           ownerPhone,
           studentUser.id,
           studentUser.name,
@@ -739,7 +810,7 @@ export const useStore = create<AppState>()(
 
         const receiverId = targetConv
           ? (senderRole === 'STUDENT' ? targetConv.ownerId : targetConv.studentId)
-          : '';
+          : (senderRole === 'STUDENT' ? '' : (chatId.startsWith('chat_') ? chatId.split('_').slice(2).join('_') : ''));
 
         sendMessageToFirestore(chatId, senderId, receiverId, senderRole, text).catch((err) => {
           console.error('Error sending message to Firestore:', err);
@@ -907,12 +978,22 @@ export const useStore = create<AppState>()(
       }),
       merge: (persistedState: any, currentState: AppState) => {
         const pState = (persistedState || {}) as Partial<AppState>;
+        const rawProps = Array.isArray(pState.properties) ? pState.properties : currentState.properties || [];
+        const cleanedProps = rawProps.map((p) => {
+          if (!p || typeof p !== 'object') return p;
+          return {
+            ...p,
+            images: extractPropertyImages(p),
+            panorama360Url: extract360TourUrl(p),
+          };
+        });
+
         return {
           ...currentState,
           user: pState.user !== undefined ? pState.user : currentState.user,
           registeredUsers: Array.isArray(pState.registeredUsers) ? pState.registeredUsers : currentState.registeredUsers || [],
           savedProperties: Array.isArray(pState.savedProperties) ? pState.savedProperties : currentState.savedProperties || [],
-          properties: Array.isArray(pState.properties) ? pState.properties : currentState.properties || [],
+          properties: cleanedProps,
           roommatePosts: Array.isArray(pState.roommatePosts) ? pState.roommatePosts : currentState.roommatePosts || [],
           conversations: Array.isArray(pState.conversations) ? pState.conversations : currentState.conversations || [],
           messages: Array.isArray(pState.messages) ? pState.messages : currentState.messages || [],

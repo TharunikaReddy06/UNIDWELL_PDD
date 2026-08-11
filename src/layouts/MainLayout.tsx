@@ -1,4 +1,4 @@
-import { Outlet, NavLink } from 'react-router-dom';
+import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import { Home, Heart, Users, MessageSquare, User } from 'lucide-react';
 import WebSidebar from '../components/navigation/WebSidebar';
 import WebHeader from '../components/navigation/WebHeader';
@@ -7,6 +7,8 @@ import { useStore } from '../store/useStore';
 
 export default function MainLayout() {
   const { unreadMessageCount } = useStore();
+  const location = useLocation();
+  const isIndividualChat = location.pathname.startsWith('/chat/') && location.pathname !== '/chat';
 
   const navItems = [
     { to: '/', icon: Home, label: 'Home' },
@@ -15,6 +17,15 @@ export default function MainLayout() {
     { to: '/chat', icon: MessageSquare, label: 'Chat', badge: unreadMessageCount },
     { to: '/profile', icon: User, label: 'Profile' },
   ];
+
+  // If in an individual 1-on-1 chat conversation, give ChatScreen full native viewport
+  if (isIndividualChat) {
+    return (
+      <div className="h-screen h-[100dvh] w-full max-w-full overflow-hidden bg-[var(--bg-primary)] dark:bg-[#0B1320] text-gray-900 dark:text-gray-100 flex flex-col">
+        <Outlet />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex w-full max-w-full overflow-x-hidden bg-[var(--bg-primary)] dark:bg-[#0B1320] text-gray-900 dark:text-gray-100 transition-colors duration-150">
@@ -26,9 +37,9 @@ export default function MainLayout() {
         {/* Top Header */}
         <WebHeader />
 
-        {/* Responsive Content Area with 1600px Centered Container */}
-        <main className="flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-20 lg:pb-8 flex flex-col justify-between overflow-x-hidden">
-          <div>
+        {/* Responsive Content Area with 1600px Centered Container and ample pb-28 bottom navigation clearance */}
+        <main className="flex-1 max-w-[1600px] w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 pb-28 lg:pb-8 flex flex-col justify-between overflow-x-hidden">
+          <div className="min-h-0 w-full">
             <Outlet />
           </div>
           <Footer />
@@ -36,8 +47,8 @@ export default function MainLayout() {
       </div>
 
       {/* Mobile Bottom Navigation (Hidden on Desktop lg:hidden) */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-gray-200 dark:border-slate-800 z-50 shadow-lg">
-        <div className="max-w-md mx-auto px-6 h-16 flex items-center justify-between">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-gray-200 dark:border-slate-800 z-40 shadow-lg pb-[max(env(safe-area-inset-bottom,0px),4px)]">
+        <div className="max-w-md mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           {navItems.map((item) => {
             const Icon = item.icon;
             return (

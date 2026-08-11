@@ -1,5 +1,6 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Compass, RotateCw, Maximize2, Move } from 'lucide-react';
+import { DEFAULT_PANORAMA_TOUR } from '../../firebase/propertyService';
 
 interface Props {
   imageUrl?: string;
@@ -14,12 +15,18 @@ export function PanoramaViewer({ imageUrl, title, className = '' }: Props) {
   const [startX, setStartX] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const samplePanoramas = [
-    'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1600&q=80',
-    'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1600&q=80',
-  ];
+  const getValidUrl = (url?: string) => {
+    if (url && typeof url === 'string' && url.trim().length > 0) {
+      return url.trim();
+    }
+    return DEFAULT_PANORAMA_TOUR;
+  };
 
-  const displayImage = imageUrl || samplePanoramas[0];
+  const [displayImage, setDisplayImage] = useState<string>(() => getValidUrl(imageUrl));
+
+  useEffect(() => {
+    setDisplayImage(getValidUrl(imageUrl));
+  }, [imageUrl]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
@@ -108,11 +115,21 @@ export function PanoramaViewer({ imageUrl, title, className = '' }: Props) {
           <img
             src={displayImage}
             alt={title || '360 Home Tour'}
+            onError={() => {
+              if (displayImage !== DEFAULT_PANORAMA_TOUR) {
+                setDisplayImage(DEFAULT_PANORAMA_TOUR);
+              }
+            }}
             className="w-full h-full object-cover select-none pointer-events-none"
           />
           <img
             src={displayImage}
             alt={title || '360 Home Tour'}
+            onError={() => {
+              if (displayImage !== DEFAULT_PANORAMA_TOUR) {
+                setDisplayImage(DEFAULT_PANORAMA_TOUR);
+              }
+            }}
             className="w-full h-full object-cover select-none pointer-events-none"
           />
         </div>

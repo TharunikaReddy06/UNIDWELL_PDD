@@ -18,14 +18,14 @@ export default function OwnerStep4AadhaarReview({ file, aadhaarData, onConfirm, 
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      className="w-full max-w-md mx-auto pb-8 bg-white dark:bg-slate-900 text-gray-900 dark:text-white p-6 rounded-3xl border border-gray-100 dark:border-slate-800 shadow-sm"
+      className="w-full max-w-md mx-auto pb-6 bg-white dark:bg-slate-900 text-gray-900 dark:text-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-gray-100 dark:border-slate-800 shadow-sm"
     >
-      <div className="text-center mb-6">
-        <div className="w-16 h-16 bg-secondary-100 dark:bg-secondary-950/60 text-secondary-600 dark:text-secondary-400 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
-          <ShieldCheck className="w-8 h-8" />
+      <div className="text-center mb-4 sm:mb-6">
+        <div className="w-12 h-12 sm:w-16 sm:h-16 bg-secondary-100 dark:bg-secondary-950/60 text-secondary-600 dark:text-secondary-400 rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
+          <ShieldCheck className="w-6 h-6 sm:w-8 sm:h-8" />
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">Aadhaar Details Review</h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400">Step 4 of 4: Confirm Your Identity</p>
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-1">Aadhaar Details Review</h2>
+        <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Step 4 of 4: Confirm Your Identity</p>
       </div>
 
       {/* Uploaded Image Preview */}

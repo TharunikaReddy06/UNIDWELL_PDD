@@ -17,11 +17,11 @@ import Step5Success from './Step5Success';
 import unidwellLogo from '../../assets/unidwell-logo.png';
 
 const STEPS = [
-  { number: 1, name: 'Personal Details' },
-  { number: 2, name: 'Email OTP Verification' },
-  { number: 3, name: 'Upload College ID' },
-  { number: 4, name: 'Review Scanned Details' },
-  { number: 5, name: 'Success' },
+  { number: 1, name: 'Personal Details', short: 'Details' },
+  { number: 2, name: 'Email OTP', short: 'OTP' },
+  { number: 3, name: 'Upload ID', short: 'ID' },
+  { number: 4, name: 'Review Details', short: 'Review' },
+  { number: 5, name: 'Success', short: 'Done' },
 ];
 
 export default function StudentSignupWizard() {
@@ -112,38 +112,39 @@ export default function StudentSignupWizard() {
   };
 
   return (
-    <div className="min-h-full flex flex-col justify-center py-6 px-4">
+    <div className="min-h-full flex flex-col justify-center py-4 sm:py-6 px-2 sm:px-4">
       {/* Brand Logo Header */}
-      <div className="mb-6 flex flex-col items-center">
+      <div className="mb-4 sm:mb-6 flex flex-col items-center">
         <img
           src={unidwellLogo}
           alt="Unidwell Logo"
-          className="w-[150px] h-auto object-contain rounded-2xl shadow-md border border-gray-100/60"
+          className="w-[125px] sm:w-[150px] h-auto object-contain rounded-2xl shadow-md border border-gray-100/60"
         />
       </div>
 
       {/* Progress Indicator */}
-      <div className="w-full max-w-xl mx-auto mb-8 px-2">
+      <div className="w-full max-w-xl mx-auto mb-6 sm:mb-8 px-1 sm:px-2">
         <div className="flex items-center justify-between relative">
-          <div className="absolute left-0 top-4 transform -translate-y-1/2 w-full h-1 bg-gray-100 rounded-full -z-10"></div>
+          <div className="absolute left-0 top-3.5 sm:top-4 transform -translate-y-1/2 w-full h-1 bg-gray-100 dark:bg-slate-800 rounded-full -z-10"></div>
           <div 
-            className="absolute left-0 top-4 transform -translate-y-1/2 h-1 bg-primary-500 rounded-full transition-all duration-500 -z-10"
+            className="absolute left-0 top-3.5 sm:top-4 transform -translate-y-1/2 h-1 bg-primary-500 rounded-full transition-all duration-500 -z-10"
             style={{ width: `${((step - 1) / (STEPS.length - 1)) * 100}%` }}
           ></div>
           
           {STEPS.map((s) => (
             <div key={s.number} className="flex flex-col items-center">
               <div 
-                className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-colors duration-300
+                className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-bold text-[11px] sm:text-xs transition-colors duration-300
                   ${step > s.number ? 'bg-primary-500 text-white' : 
-                    step === s.number ? 'bg-primary-600 text-white shadow-[0_0_0_4px_rgba(var(--color-primary-100),1)]' : 
-                    'bg-white border-2 border-gray-200 text-gray-400'}
+                    step === s.number ? 'bg-primary-600 text-white shadow-[0_0_0_3px_rgba(14,165,164,0.3)]' : 
+                    'bg-white dark:bg-slate-800 border-2 border-gray-200 dark:border-slate-700 text-gray-400'}
                 `}
               >
                 {s.number}
               </div>
-              <span className={`text-[10px] mt-1 font-semibold text-center max-w-[70px] ${step >= s.number ? 'text-primary-700' : 'text-gray-400'}`}>
-                {s.name}
+              <span className={`text-[9px] sm:text-[10px] mt-1 font-semibold text-center max-w-[50px] sm:max-w-[70px] truncate ${step >= s.number ? 'text-primary-700 dark:text-primary-400' : 'text-gray-400 dark:text-gray-500'}`}>
+                <span className="sm:hidden">{s.short}</span>
+                <span className="hidden sm:inline">{s.name}</span>
               </span>
             </div>
           ))}

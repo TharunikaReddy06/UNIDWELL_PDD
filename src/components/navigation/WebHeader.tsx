@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useStore } from '../../store/useStore';
 import { 
@@ -37,6 +38,18 @@ export default function WebHeader() {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showMobileDrawer, setShowMobileDrawer] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Lock body scroll when mobile drawer is open
+  useEffect(() => {
+    if (showMobileDrawer) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showMobileDrawer]);
   
   // Confirmation Modals
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
@@ -123,45 +136,45 @@ export default function WebHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-20 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-gray-100 dark:border-slate-800 px-4 sm:px-6 py-3.5 flex items-center justify-between shadow-2xs transition-colors duration-150">
+    <header className="sticky top-0 z-20 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-gray-100 dark:border-slate-800 px-3 sm:px-6 py-2.5 sm:py-3.5 flex items-center justify-between shadow-2xs transition-colors duration-150">
       {/* Brand & Page Header */}
-      <div className="flex items-center gap-3 sm:gap-4">
+      <div className="flex items-center gap-2.5 sm:gap-4">
         {/* Mobile Hamburger Button (<1024px lg:hidden) */}
         <button
           type="button"
           onClick={() => setShowMobileDrawer(true)}
-          className="lg:hidden p-2.5 rounded-2xl bg-gray-50 dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-slate-700 transition-colors flex items-center justify-center min-h-[44px] min-w-[44px]"
+          className="lg:hidden p-2 rounded-xl bg-gray-50 dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-slate-700 transition-colors flex items-center justify-center min-h-[40px] min-w-[40px]"
           title="Open Navigation Menu"
         >
           <Menu className="w-5 h-5" />
         </button>
 
-        {/* Mobile / Navbar Logo (42x42 px icon + text beside it) */}
+        {/* Brand Logo & Name */}
         <div 
           onClick={() => navigate(isOwner ? '/owner' : '/')} 
-          className="flex items-center gap-2.5 cursor-pointer group"
+          className="flex items-center gap-2 cursor-pointer group"
           title="Unidwell Home"
         >
           <img 
             src={unidwellIcon} 
             alt="Unidwell Logo" 
-            className="w-[38px] h-[38px] sm:w-[42px] sm:h-[42px] object-contain rounded-xl shadow-xs group-hover:scale-105 transition-transform" 
+            className="w-[34px] h-[34px] sm:w-[40px] sm:h-[40px] object-contain rounded-xl shadow-xs group-hover:scale-105 transition-transform" 
           />
-          <div className="hidden sm:block">
-            <span className="font-black text-lg text-gray-900 dark:text-white tracking-tight block leading-none">Unidwell</span>
-            <span className="text-[10px] text-gray-400 dark:text-gray-500 font-bold block mt-0.5">{isOwner ? 'Owner Console' : 'Student Platform'}</span>
+          <div>
+            <span className="font-black text-base sm:text-lg text-gray-900 dark:text-white tracking-tight block leading-none">Unidwell</span>
+            <span className="text-[9px] sm:text-[10px] text-gray-400 dark:text-gray-500 font-bold hidden sm:block mt-0.5">{isOwner ? 'Owner Console' : 'Student Housing'}</span>
           </div>
         </div>
 
-        <div className="h-6 w-px bg-gray-200 dark:bg-slate-800 hidden sm:block" />
-
-        <div>
-          <h1 className="text-sm sm:text-lg font-extrabold text-gray-900 dark:text-white leading-tight truncate max-w-[150px] sm:max-w-none">{getPageTitle()}</h1>
+        {/* Desktop Page Title (Hidden on mobile to keep header clean and uncrowded) */}
+        <div className="hidden lg:flex items-center gap-3">
+          <div className="h-5 w-px bg-gray-200 dark:bg-slate-800" />
+          <h1 className="text-sm font-bold text-gray-700 dark:text-gray-300 leading-tight truncate">{getPageTitle()}</h1>
         </div>
       </div>
 
-      {/* Center Search Bar */}
-      <form onSubmit={handleSearchSubmit} className="hidden md:flex items-center relative w-80 lg:w-96">
+      {/* Center Search Bar (Desktop only md:flex) */}
+      <form onSubmit={handleSearchSubmit} className="hidden md:flex items-center relative w-72 lg:w-96">
         <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
         <input
           type="text"
@@ -173,28 +186,27 @@ export default function WebHeader() {
       </form>
 
       {/* Right Controls */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3">
         {/* Owner Badge */}
         {user && isOwner && (
-          <div className="hidden sm:flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl bg-secondary-50 dark:bg-secondary-950/60 border border-secondary-100 dark:border-secondary-900 text-secondary-700 dark:text-secondary-300 text-xs font-bold shadow-2xs">
-            <Building2 className="w-4 h-4 text-secondary-600 dark:text-secondary-400" />
+          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-secondary-50 dark:bg-secondary-950/60 border border-secondary-100 dark:border-secondary-900 text-secondary-700 dark:text-secondary-300 text-xs font-bold shadow-2xs">
+            <Building2 className="w-3.5 h-3.5 text-secondary-600 dark:text-secondary-400" />
             <span>Owner Console</span>
           </div>
         )}
-
 
         {/* Notification Bell */}
         <div className="relative">
           <button
             onClick={handleToggleNotifications}
-            className={`p-2.5 rounded-2xl bg-gray-50 dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700 text-gray-600 dark:text-gray-300 transition-all relative border border-gray-100 dark:border-slate-700 ${
+            className={`p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-gray-50 dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700 text-gray-600 dark:text-gray-300 transition-all relative border border-gray-100 dark:border-slate-700 min-h-[40px] min-w-[40px] flex items-center justify-center ${
               shakeBell ? 'animate-bounce text-red-500 bg-red-50 dark:bg-red-950/50 border-red-200 dark:border-red-900' : ''
             }`}
             title="Notifications"
           >
-            <Bell className={`w-5 h-5 ${shakeBell ? 'text-red-600' : ''}`} />
+            <Bell className={`w-4 h-4 sm:w-5 sm:h-5 ${shakeBell ? 'text-red-600' : ''}`} />
             {unreadNotifs.length > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full ring-2 ring-white dark:ring-slate-900 shadow-xs flex items-center justify-center min-w-[18px]">
+              <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-full ring-2 ring-white dark:ring-slate-900 shadow-xs flex items-center justify-center min-w-[16px]">
                 {unreadNotifs.length}
               </span>
             )}
@@ -394,125 +406,129 @@ export default function WebHeader() {
         </div>
       )}
 
-      {/* Slide-out Mobile Navigation Drawer (<1024px) */}
-      {showMobileDrawer && (
-        <div className="fixed inset-0 z-[130] flex lg:hidden">
-          {/* Backdrop */}
+      {/* Slide-out Mobile Navigation Drawer via React Portal directly to document.body */}
+      {showMobileDrawer && typeof document !== 'undefined' && createPortal(
+        <div className="fixed inset-0 z-[9999] flex lg:hidden">
+          {/* Semi-transparent dark/neutral dimmed background overlay */}
           <div 
             onClick={() => setShowMobileDrawer(false)}
-            className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
+            className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity cursor-pointer"
           />
 
-          {/* Drawer Content */}
-          <div className="relative w-80 max-w-[85vw] bg-white dark:bg-slate-900 text-gray-900 dark:text-white h-full shadow-2xl flex flex-col justify-between p-5 z-10 animate-in slide-in-from-left duration-300 border-r border-gray-100 dark:border-slate-800">
-            <div className="space-y-5">
-              {/* Drawer Header */}
-              <div className="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-slate-800">
-                <div className="flex items-center gap-3">
-                  <img src={unidwellIcon} alt="Unidwell" className="w-10 h-10 object-contain rounded-xl shadow-xs" />
+          {/* Solid Drawer Content Sliding in from Left */}
+          <div className="relative w-72 sm:w-80 max-w-[85vw] bg-white dark:bg-slate-900 text-gray-900 dark:text-white h-full shadow-2xl flex flex-col justify-between p-5 z-[10000] animate-in slide-in-from-left duration-300 border-r border-gray-100 dark:border-slate-800 overflow-y-auto">
+            <div className="space-y-4">
+              {/* Drawer Brand Header */}
+              <div className="flex items-center justify-between pb-3.5 border-b border-gray-100 dark:border-slate-800">
+                <div className="flex items-center gap-2.5">
+                  <img src={unidwellIcon} alt="Unidwell" className="w-9 h-9 object-contain rounded-xl shadow-xs" />
                   <div>
-                    <h2 className="font-black text-lg text-gray-900 dark:text-white leading-none">Unidwell</h2>
+                    <h2 className="font-black text-base text-gray-900 dark:text-white leading-none">Unidwell</h2>
                     <p className="text-[10px] font-bold text-primary-600 dark:text-primary-400 mt-0.5">{isOwner ? 'Owner Console' : 'Student Housing'}</p>
                   </div>
                 </div>
                 <button
                   onClick={() => setShowMobileDrawer(false)}
-                  className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl"
+                  className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl cursor-pointer"
+                  title="Close Menu"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              {/* User Badge */}
+              {/* User Profile Card */}
               {user && (
-                <div className="p-3 bg-gray-50 dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-primary-600 text-white flex items-center justify-center font-bold text-sm uppercase">
-                    {user.name[0]}
+                <div className="p-3.5 bg-primary-50/60 dark:bg-slate-800/80 rounded-2xl border border-primary-100 dark:border-slate-700 flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-600 to-primary-500 text-white flex items-center justify-center font-bold text-sm uppercase shadow-xs flex-shrink-0">
+                    {user.name?.[0] || 'U'}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-bold text-xs text-gray-900 dark:text-white truncate">{user.name}</h4>
-                    <span className="text-[10px] font-bold text-primary-600 dark:text-primary-400 block truncate">{user.email}</span>
+                    <h4 className="font-bold text-xs text-gray-900 dark:text-white truncate flex items-center gap-1">
+                      {user.name || 'User'}
+                      <ShieldCheck className="w-3.5 h-3.5 text-accent-500 flex-shrink-0" />
+                    </h4>
+                    <span className="text-[10px] font-semibold text-primary-600 dark:text-primary-400 block truncate">{user.college || user.email || 'Verified Student'}</span>
                   </div>
                 </div>
               )}
 
               {/* Drawer Links */}
-              <nav className="space-y-1">
+              <nav className="space-y-1 pt-1">
                 <span className="text-[10px] font-extrabold text-gray-400 dark:text-gray-500 uppercase tracking-wider px-2 block mb-2">Navigation</span>
                 
                 {!isOwner ? (
                   <>
                     <button
                       onClick={() => { navigate('/'); setShowMobileDrawer(false); }}
-                      className="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-xs text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-slate-800 hover:text-primary-700 dark:hover:text-primary-400 transition-colors"
+                      className="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-xs text-gray-700 dark:text-gray-200 hover:bg-primary-50 dark:hover:bg-slate-800 hover:text-primary-700 dark:hover:text-primary-400 transition-colors cursor-pointer"
                     >
-                      <Home className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                      <Home className="w-4 h-4 text-primary-600 dark:text-primary-400 flex-shrink-0" />
                       <span>Explore Homes</span>
                     </button>
                     <button
                       onClick={() => { navigate('/saved'); setShowMobileDrawer(false); }}
-                      className="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-xs text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-slate-800 hover:text-primary-700 dark:hover:text-primary-400 transition-colors"
+                      className="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-xs text-gray-700 dark:text-gray-200 hover:bg-primary-50 dark:hover:bg-slate-800 hover:text-primary-700 dark:hover:text-primary-400 transition-colors cursor-pointer"
                     >
-                      <Heart className="w-4 h-4 text-rose-500" />
+                      <Heart className="w-4 h-4 text-rose-500 flex-shrink-0" />
                       <span>Saved Properties</span>
                     </button>
                     <button
                       onClick={() => { navigate('/roommates'); setShowMobileDrawer(false); }}
-                      className="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-xs text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-slate-800 hover:text-primary-700 dark:hover:text-primary-400 transition-colors"
+                      className="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-xs text-gray-700 dark:text-gray-200 hover:bg-primary-50 dark:hover:bg-slate-800 hover:text-primary-700 dark:hover:text-primary-400 transition-colors cursor-pointer"
                     >
-                      <Users className="w-4 h-4 text-teal-600 dark:text-teal-400" />
-                      <span>Roommate Matcher</span>
+                      <Users className="w-4 h-4 text-teal-600 dark:text-teal-400 flex-shrink-0" />
+                      <span>Roommate Finder</span>
                     </button>
                     <button
                       onClick={() => { navigate('/chat'); setShowMobileDrawer(false); }}
-                      className="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-xs text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-slate-800 hover:text-primary-700 dark:hover:text-primary-400 transition-colors"
+                      className="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-xs text-gray-700 dark:text-gray-200 hover:bg-primary-50 dark:hover:bg-slate-800 hover:text-primary-700 dark:hover:text-primary-400 transition-colors cursor-pointer"
                     >
-                      <MessageSquare className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                      <span>Messages &amp; Chat</span>
+                      <MessageSquare className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                      <span>Messages</span>
                     </button>
                     <button
                       onClick={() => { navigate('/profile'); setShowMobileDrawer(false); }}
-                      className="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-xs text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-slate-800 hover:text-primary-700 dark:hover:text-primary-400 transition-colors"
+                      className="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-xs text-gray-700 dark:text-gray-200 hover:bg-primary-50 dark:hover:bg-slate-800 hover:text-primary-700 dark:hover:text-primary-400 transition-colors cursor-pointer"
                     >
-                      <User className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-                      <span>Student Profile</span>
+                      <User className="w-4 h-4 text-purple-600 dark:text-purple-400 flex-shrink-0" />
+                      <span>My Profile</span>
                     </button>
                   </>
                 ) : (
                   <>
                     <button
                       onClick={() => { navigate('/owner'); setShowMobileDrawer(false); }}
-                      className="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-xs text-gray-700 dark:text-gray-300 hover:bg-secondary-50 dark:hover:bg-slate-800 hover:text-secondary-700 dark:hover:text-secondary-400 transition-colors"
+                      className="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-xs text-gray-700 dark:text-gray-200 hover:bg-secondary-50 dark:hover:bg-slate-800 hover:text-secondary-700 dark:hover:text-secondary-400 transition-colors cursor-pointer"
                     >
-                      <LayoutDashboard className="w-4 h-4 text-secondary-600 dark:text-secondary-400" />
-                      <span>Owner Dashboard</span>
+                      <LayoutDashboard className="w-4 h-4 text-secondary-600 dark:text-secondary-400 flex-shrink-0" />
+                      <span>Dashboard</span>
                     </button>
                     <button
                       onClick={() => { navigate('/owner/properties'); setShowMobileDrawer(false); }}
-                      className="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-xs text-gray-700 dark:text-gray-300 hover:bg-secondary-50 dark:hover:bg-slate-800 hover:text-secondary-700 dark:hover:text-secondary-400 transition-colors"
+                      className="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-xs text-gray-700 dark:text-gray-200 hover:bg-secondary-50 dark:hover:bg-slate-800 hover:text-secondary-700 dark:hover:text-secondary-400 transition-colors cursor-pointer"
                     >
-                      <Building2 className="w-4 h-4 text-primary-600 dark:text-primary-400" />
-                      <span>My Properties</span>
+                      <Building2 className="w-4 h-4 text-primary-600 dark:text-primary-400 flex-shrink-0" />
+                      <span>Properties</span>
                     </button>
                     <button
                       onClick={() => { navigate('/owner/interested-students'); setShowMobileDrawer(false); }}
-                      className="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-xs text-gray-700 dark:text-gray-300 hover:bg-secondary-50 dark:hover:bg-slate-800 hover:text-secondary-700 dark:hover:text-secondary-400 transition-colors"
+                      className="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-xs text-gray-700 dark:text-gray-200 hover:bg-secondary-50 dark:hover:bg-slate-800 hover:text-secondary-700 dark:hover:text-secondary-400 transition-colors cursor-pointer"
                     >
-                      <Users className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                      <Users className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0" />
                       <span>Interested Students</span>
                     </button>
                     <button
                       onClick={() => { navigate('/owner/messages'); setShowMobileDrawer(false); }}
-                      className="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-xs text-gray-700 dark:text-gray-300 hover:bg-secondary-50 dark:hover:bg-slate-800 hover:text-secondary-700 dark:hover:text-secondary-400 transition-colors"
+                      className="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-xs text-gray-700 dark:text-gray-200 hover:bg-secondary-50 dark:hover:bg-slate-800 hover:text-secondary-700 dark:hover:text-secondary-400 transition-colors cursor-pointer"
                     >
-                      <MessageSquare className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                      <span>Student Enquiries</span>
+                      <MessageSquare className="w-4 h-4 text-indigo-600 dark:text-indigo-400 flex-shrink-0" />
+                      <span>Messages</span>
                     </button>
                     <button
                       onClick={() => { navigate('/owner/profile'); setShowMobileDrawer(false); }}
-                      className="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-xs text-gray-700 dark:text-gray-300 hover:bg-secondary-50 dark:hover:bg-slate-800 hover:text-secondary-700 dark:hover:text-secondary-400 transition-colors"
+                      className="w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl font-bold text-xs text-gray-700 dark:text-gray-200 hover:bg-secondary-50 dark:hover:bg-slate-800 hover:text-secondary-700 dark:hover:text-secondary-400 transition-colors cursor-pointer"
                     >
-                      <User className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                      <User className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
                       <span>Owner Profile</span>
                     </button>
                   </>
@@ -527,14 +543,15 @@ export default function WebHeader() {
                   setShowMobileDrawer(false);
                   await logout();
                 }}
-                className="w-full flex items-center justify-center gap-2 py-3 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 rounded-2xl font-bold text-xs hover:bg-red-100 dark:hover:bg-red-950/70 transition-colors"
+                className="w-full flex items-center justify-center gap-2 py-3 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 rounded-2xl font-bold text-xs hover:bg-red-100 dark:hover:bg-red-950/70 transition-colors cursor-pointer"
               >
                 <LogOut className="w-4 h-4" />
                 <span>Sign Out</span>
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </header>
   );

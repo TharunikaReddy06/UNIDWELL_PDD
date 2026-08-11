@@ -31,8 +31,8 @@ export default function OwnerBottomNavigation() {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-gray-200 dark:border-slate-800 z-50 transition-colors duration-150">
-      <div className="max-w-md mx-auto px-6 h-16 flex items-center justify-between">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-gray-200 dark:border-slate-800 z-50 transition-colors duration-150 pb-[max(env(safe-area-inset-bottom,0px),4px)]">
+      <div className="max-w-md mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         {ownerNavItems.map((item) => {
           const Icon = item.icon;
           return (

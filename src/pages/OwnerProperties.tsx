@@ -7,6 +7,7 @@ import { PropertyDetailsModal } from '../components/common/PropertyDetailsModal'
 import PropertyAnalyticsModal from '../components/owner/PropertyAnalyticsModal';
 import { Building2, Plus, Eye, Users, Trash2, AlertTriangle } from 'lucide-react';
 import type { Property } from '../types';
+import { DEFAULT_PROPERTY_IMAGE } from '../firebase/propertyService';
 
 export default function OwnerProperties() {
   const { user, properties, propertyViews, interestedStudentsList, updateProperty, deleteProperty } = useStore();
@@ -128,8 +129,18 @@ export default function OwnerProperties() {
                   {/* Property Image with 16/10 aspect ratio */}
                   <div className="aspect-[16/10] w-full bg-gray-100 dark:bg-slate-800 relative overflow-hidden flex-shrink-0">
                     <img
-                      src={property.images[0] || 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80'}
+                      src={
+                        Array.isArray(property.images) && property.images.length > 0 && typeof property.images[0] === 'string' && property.images[0].trim().length > 0 && !property.images[0].startsWith('blob:')
+                          ? property.images[0].trim()
+                          : DEFAULT_PROPERTY_IMAGE
+                      }
                       alt={property.title}
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (target.src !== DEFAULT_PROPERTY_IMAGE) {
+                          target.src = DEFAULT_PROPERTY_IMAGE;
+                        }
+                      }}
                       className="w-full h-full object-cover"
                     />
                     

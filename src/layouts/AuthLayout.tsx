@@ -56,8 +56,8 @@ export default function AuthLayout() {
   ];
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-3 sm:p-5 lg:p-8" style={{ background: '#0F172A' }}>
-      <div className="w-full max-w-[1300px] bg-white rounded-[28px] overflow-hidden shadow-2xl grid grid-cols-1 lg:grid-cols-12 min-h-[740px]">
+    <div className="min-h-[100dvh] min-h-screen flex items-center justify-center p-0 sm:p-4 lg:p-8 bg-[var(--bg-primary)] lg:bg-[#0F172A] transition-colors">
+      <div className="w-full max-w-[1300px] bg-transparent sm:bg-white sm:dark:bg-slate-900 rounded-none sm:rounded-[28px] overflow-visible sm:overflow-hidden shadow-none sm:shadow-2xl grid grid-cols-1 lg:grid-cols-12 min-h-fit lg:min-h-[740px]">
 
         {/* ══════════════ LEFT HERO PANEL ══════════════ */}
         <div
@@ -137,7 +137,6 @@ export default function AuthLayout() {
             {/* Feature Chips */}
             <div className="flex flex-wrap gap-2">
               {chips.map((chip, i) => {
-                const Icon = chip.icon;
                 return (
                   <motion.span
                     key={i}
@@ -198,25 +197,9 @@ export default function AuthLayout() {
         </div>
 
         {/* ══════════════ RIGHT FORM PANEL ══════════════ */}
-        <div className="lg:col-span-6 xl:col-span-7 bg-white flex flex-col justify-center px-8 sm:px-12 xl:px-16 py-10">
-          {/* Mobile-only logo */}
-          <div className="lg:hidden text-center mb-8">
-            <div className="relative inline-block mb-3">
-              <div className="absolute inset-0 bg-teal-400/20 rounded-3xl blur-xl" />
-              <img
-                src={unidwellLogo}
-                alt="Unidwell"
-                className="relative w-20 h-auto object-contain mx-auto rounded-2xl shadow-lg border border-gray-100"
-              />
-            </div>
-            <h1 className="text-2xl font-black text-gray-900" style={{ fontFamily: "'Poppins', sans-serif" }}>
-              Unidwell
-            </h1>
-            <p className="text-xs text-gray-400 font-medium mt-0.5">Smart Student Housing</p>
-          </div>
-
+        <div className="lg:col-span-6 xl:col-span-7 bg-transparent sm:bg-white sm:dark:bg-slate-900 flex flex-col justify-center px-3 sm:px-10 xl:px-16 py-4 sm:py-8 overflow-y-auto w-full min-h-[100dvh] sm:min-h-0">
           {/* Form Content */}
-          <div className="w-full max-w-md mx-auto">
+          <div className="w-full max-w-md mx-auto pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)]">
             <Outlet />
           </div>
         </div>

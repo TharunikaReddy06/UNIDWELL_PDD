@@ -69,3 +69,34 @@ export function isValidAmount(val: any): boolean {
   const num = Number(val);
   return !isNaN(num) && num >= 0;
 }
+
+/**
+ * Validates Google Maps Location Link
+ * Supports formats like https://maps.google.com/..., https://goo.gl/maps/..., https://maps.app.goo.gl/..., https://www.google.com/maps/...
+ */
+export function isValidGoogleMapsUrl(url: string): boolean {
+  if (!url || typeof url !== 'string') return true; // Optional field
+  const trimmed = url.trim();
+  if (!trimmed) return true;
+
+  try {
+    const fullUrl = trimmed.startsWith('http://') || trimmed.startsWith('https://') 
+      ? trimmed 
+      : `https://${trimmed}`;
+    const parsed = new URL(fullUrl);
+    const host = parsed.hostname.toLowerCase();
+    
+    return (
+      host === 'maps.google.com' ||
+      host.endsWith('.maps.google.com') ||
+      host === 'google.com' ||
+      host.endsWith('.google.com') ||
+      host === 'goo.gl' ||
+      host.endsWith('.goo.gl') ||
+      host.includes('google.co') ||
+      host.includes('maps.app.goo.gl')
+    );
+  } catch {
+    return false;
+  }
+}

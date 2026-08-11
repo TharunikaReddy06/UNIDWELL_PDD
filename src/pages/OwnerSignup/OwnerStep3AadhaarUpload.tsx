@@ -85,11 +85,11 @@ export default function OwnerStep3AadhaarUpload({ onNext, onBack, userGivenName 
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
-      className="w-full max-w-md mx-auto bg-white dark:bg-slate-900 text-gray-900 dark:text-white p-6 rounded-3xl border border-gray-100 dark:border-slate-800 shadow-sm"
+      className="w-full max-w-md mx-auto bg-white dark:bg-slate-900 text-gray-900 dark:text-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-gray-100 dark:border-slate-800 shadow-sm"
     >
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Aadhaar Card Upload</h2>
-        <p className="text-sm text-gray-500 dark:text-gray-400">Step 3 of 4: Identity Verification</p>
+      <div className="text-center mb-4 sm:mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-1">Aadhaar Card Upload</h2>
+        <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Step 3 of 4: Identity Verification</p>
       </div>
 
       <input 

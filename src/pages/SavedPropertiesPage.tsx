@@ -9,6 +9,7 @@ import {
   Eye, Trash2, HeartOff, AlertCircle
 } from 'lucide-react';
 import type { Property } from '../types';
+import { DEFAULT_PROPERTY_IMAGE } from '../firebase/propertyService';
 
 export default function SavedPropertiesPage() {
   const navigate = useNavigate();
@@ -87,8 +88,18 @@ export default function SavedPropertiesPage() {
                 >
                   <div className="aspect-[16/9] w-full rounded-2xl overflow-hidden bg-gray-100 dark:bg-slate-800 relative">
                     <img
-                      src={property.images[0] || 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80'}
+                      src={
+                        Array.isArray(property.images) && property.images.length > 0 && typeof property.images[0] === 'string' && property.images[0].trim().length > 0 && !property.images[0].startsWith('blob:')
+                          ? property.images[0].trim()
+                          : DEFAULT_PROPERTY_IMAGE
+                      }
                       alt={property.title}
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (target.src !== DEFAULT_PROPERTY_IMAGE) {
+                          target.src = DEFAULT_PROPERTY_IMAGE;
+                        }
+                      }}
                       className={`w-full h-full object-cover ${!isAvailable ? 'grayscale opacity-80' : ''}`}
                     />
                     
@@ -154,7 +165,7 @@ export default function SavedPropertiesPage() {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="grid grid-cols-3 gap-2 pt-1">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
                     <Button
                       variant="outline"
                       size="sm"

@@ -22,7 +22,7 @@ export default function ChooseAccountType() {
 
   return (
     <motion.div 
-      className="flex flex-col min-h-full px-4 pt-8 pb-12 relative"
+      className="flex flex-col min-h-full px-3 sm:px-4 pt-3 sm:pt-6 pb-6 sm:pb-10 relative"
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
@@ -32,16 +32,16 @@ export default function ChooseAccountType() {
       <div className="absolute top-0 right-0 w-64 h-64 bg-primary-100/50 dark:bg-primary-900/20 rounded-full blur-3xl -z-10 pointer-events-none"></div>
       <div className="absolute bottom-0 left-0 w-64 h-64 bg-secondary-100/30 dark:bg-secondary-900/20 rounded-full blur-3xl -z-10 pointer-events-none"></div>
 
-      <div className="mb-8 text-center flex flex-col items-center">
+      <div className="mb-6 text-center flex flex-col items-center">
         <img 
           src={unidwellLogo} 
           alt="Unidwell Brand Logo" 
-          className="w-[150px] h-auto object-contain rounded-2xl shadow-md mb-4 border border-gray-100/60 dark:border-slate-800"
+          className="w-[125px] sm:w-[150px] h-auto object-contain rounded-2xl shadow-md mb-3 border border-gray-100/60 dark:border-slate-800"
         />
-        <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-2 tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white mb-1 tracking-tight">
           Create Your Account
         </h1>
-        <p className="text-gray-600 dark:text-gray-400 text-sm max-w-sm mx-auto">
+        <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm max-w-sm mx-auto">
           Choose how you want to use Unidwell.
         </p>
       </div>

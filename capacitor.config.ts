@@ -23,7 +23,7 @@ const config: CapacitorConfig = {
     // Use the web implementation for storage (vs. native fs)
     webContentsDebuggingEnabled: true,
     // Capture background color before React paints to avoid white flash
-    backgroundColor: '#0F172A',
+    backgroundColor: '#091E2A',
   },
 
   // ── Plugin Configuration ───────────────────────────────────────────────────
@@ -33,9 +33,10 @@ const config: CapacitorConfig = {
     SplashScreen: {
       launchAutoHide:     true,     // Native splash hides immediately
       launchShowDuration: 0,        // 0ms — hidden before React even paints
-      backgroundColor:   '#0F172A',
-      androidSplashResourceName: 'splash',
+      backgroundColor:   '#091E2A',
       showSpinner:       false,
+      splashImmersive:   true,
+      splashFullScreen:  true,
     },
 
     // Camera: Used for profile photo / property photo uploads
@@ -46,7 +47,14 @@ const config: CapacitorConfig = {
     // StatusBar: Translucent overlay so the app content goes edge-to-edge
     StatusBar: {
       style: 'dark',
-      backgroundColor: '#0F172A',
+      backgroundColor: '#091E2A',
+    },
+
+    // Keyboard: Adjust WebView resize mode when Android virtual keyboard opens
+    Keyboard: {
+      resize: 'body',
+      style: 'dark',
+      resizeOnFullScreen: true,
     },
   },
 };

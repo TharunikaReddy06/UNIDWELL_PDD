@@ -43,7 +43,7 @@ export default function PropertyAnalyticsModal({ property, isOpen, onClose }: Pr
       }
     );
     onClose();
-    navigate('/owner/messages');
+    navigate(`/chat/${chatId}`);
   };
 
   return (

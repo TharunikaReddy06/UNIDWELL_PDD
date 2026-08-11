@@ -35,22 +35,37 @@ export default function OwnerInterestedStudents() {
 
   const handleStartChat = (item: InterestedStudentRecord) => {
     if (!user) return;
+    const effectiveStudentId = item.studentId || item.studentUid || item.id;
+    const effectiveStudentName = item.studentName || 'Student';
+    const effectivePropId = item.propertyId || 'prop-1';
+    const effectivePropTitle = item.propertyTitle || 'Property';
+
     const chatId = startConversation(
-      item.propertyId,
-      item.propertyTitle,
+      effectivePropId,
+      effectivePropTitle,
       user.id,
       user.name,
       {
-        id: item.studentId,
-        name: item.studentName,
-        email: item.studentEmail,
-        phone: item.studentPhone,
-        college: item.studentCollege,
+        id: effectiveStudentId,
+        name: effectiveStudentName,
+        email: item.studentEmail || '',
+        phone: item.studentPhone || '',
+        college: item.studentCollege || item.collegeName || 'Verified Student',
+        avatar: item.studentAvatar || item.profileImage || '',
         role: 'STUDENT',
         verified: true,
       }
     );
-    navigate(`/owner/messages`);
+    navigate(`/chat/${chatId}`, {
+      state: {
+        activeChatId: chatId,
+        chatId: chatId,
+        studentId: effectiveStudentId,
+        studentName: effectiveStudentName,
+        propertyId: effectivePropId,
+        propertyTitle: effectivePropTitle,
+      },
+    });
   };
 
   const handleViewProfile = (item: InterestedStudentRecord) => {
